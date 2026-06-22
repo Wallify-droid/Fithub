@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AuthKey â€” TOTP Authenticator</title>
+<title>AuthKey — TOTP Authenticator</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
@@ -45,7 +45,7 @@
     align-items: center;
   }
 
-  /* â”€â”€ HEADER â”€â”€ */
+  /* ── HEADER ── */
   header {
     width: 100%;
     max-width: 520px;
@@ -75,10 +75,10 @@
   .add-btn:hover { background: #ddd; }
   .add-btn:active { transform: scale(0.97); }
 
-  /* â”€â”€ MAIN â”€â”€ */
+  /* ── MAIN ── */
   main { width: 100%; max-width: 520px; padding: 24px 24px 60px; }
 
-  /* â”€â”€ STATS BAR â”€â”€ */
+  /* ── STATS BAR ── */
   .stats-bar {
     display: flex;
     gap: 10px;
@@ -113,7 +113,7 @@
     color: var(--text);
   }
 
-  /* â”€â”€ ADD PANEL â”€â”€ */
+  /* ── ADD PANEL ── */
   .add-panel {
     background: var(--surface);
     border: 1px solid var(--border2);
@@ -163,14 +163,14 @@
   .pnl-btn.ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
   .pnl-btn.ghost:hover { color: var(--text); }
 
-  /* â”€â”€ SECTION LABEL â”€â”€ */
+  /* ── SECTION LABEL ── */
   .section-head {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 12px;
   }
   .section-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
 
-  /* â”€â”€ ACCOUNT CARDS â”€â”€ */
+  /* ── ACCOUNT CARDS ── */
   .accounts-list { display: flex; flex-direction: column; gap: 8px; }
 
   .account-card {
@@ -251,7 +251,7 @@
   .card-bar-fill.warn { background: var(--warn); }
   .card-bar-fill.danger { background: var(--danger); }
 
-  /* â”€â”€ EMPTY STATE â”€â”€ */
+  /* ── EMPTY STATE ── */
   .empty {
     margin-top: 20px;
     background: var(--surface);
@@ -281,7 +281,7 @@
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* â”€â”€ TOAST â”€â”€ */
+  /* ── TOAST ── */
   .toast {
     position: fixed; bottom: 24px; left: 50%;
     transform: translateX(-50%) translateY(16px);
@@ -337,13 +337,14 @@
         </div>
         <div>
           <div class="field-label">Service (optional)</div>
-          <input class="field-input" id="inpIssuer" type="text" placeholder="GitHub, Google, Discordâ€¦" />
+          <input class="field-input" id="inpIssuer" type="text" placeholder="GitHub, Google, Discord…" />
         </div>
         <div>
           <div class="field-label">Secret Key</div>
           <input class="field-input mono" id="inpSecret" type="text"
-            placeholder="JBSWY3DPEHPK3PXP" autocomplete="off" autocorrect="off"
+            placeholder="" autocomplete="off" autocorrect="off"
             spellcheck="false" />
+          <div style="font-size:10px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">e.g. II3TQ33HW5KLLOOT</div>
         </div>
       </div>
       <div class="panel-actions">
@@ -360,7 +361,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// â”€â”€ TOTP (RFC 6238) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOTP (RFC 6238) ───────────────────────────────────────────────────────────
 
 function b32decode(s) {
   const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
@@ -389,13 +390,13 @@ async function totp(secret) {
 
 function secsLeft() { return 30 - (Math.floor(Date.now()/1000) % 30); }
 
-// â”€â”€ Storage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Storage ──────────────────────────────────────────────────────────────────
 
 let accounts = [];
 try { accounts = JSON.parse(localStorage.getItem('authkey_v2') || '[]'); } catch {}
 function save() { localStorage.setItem('authkey_v2', JSON.stringify(accounts)); }
 
-// â”€â”€ Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Panel ────────────────────────────────────────────────────────────────────
 
 let panelOpen = false;
 function togglePanel() {
@@ -410,7 +411,7 @@ function addAccount() {
   const secret = document.getElementById('inpSecret').value.trim().replace(/\s/g,'');
   if (!name)   return toast('Enter account name');
   if (!secret) return toast('Enter secret key');
-  if (!/^[A-Z2-7]+=*$/i.test(secret)) return toast('Invalid secret â€” check your key');
+  if (!/^[A-Z2-7]+=*$/i.test(secret)) return toast('Invalid secret — check your key');
   accounts.push({ id: Date.now(), name, issuer, secret });
   save(); render();
   document.getElementById('inpName').value = '';
@@ -418,7 +419,7 @@ function addAccount() {
   document.getElementById('inpSecret').value = '';
   panelOpen = false;
   document.getElementById('addPanel').classList.remove('open');
-  toast('Account added âœ“');
+  toast('Account added ✓');
 }
 
 function deleteAccount(id) {
@@ -427,7 +428,7 @@ function deleteAccount(id) {
   toast('Removed');
 }
 
-// â”€â”€ Copy â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Copy ─────────────────────────────────────────────────────────────────────
 
 function copyCode(id) {
   const el = document.getElementById('code-'+id);
@@ -438,7 +439,7 @@ function copyCode(id) {
   const doCopy = () => {
     el.textContent = 'Copied!';
     el.classList.add('ok');
-    toast('Copied to clipboard âœ“');
+    toast('Copied to clipboard ✓');
     setTimeout(() => {
       el.classList.remove('ok');
       updateCard(accounts.find(a=>a.id==id));
@@ -459,11 +460,11 @@ function fallbackCopy(text, cb) {
   document.body.appendChild(ta);
   ta.focus(); ta.select();
   try { document.execCommand('copy'); cb(); }
-  catch { toast('Copy failed â€” long press the code'); }
+  catch { toast('Copy failed — long press the code'); }
   document.body.removeChild(ta);
 }
 
-// â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Render ───────────────────────────────────────────────────────────────────
 
 function initials(name) {
   const p = name.split(/[@.\s_]/);
@@ -478,11 +479,11 @@ function render() {
     stats.style.display = 'none';
     c.innerHTML = `
       <div class="empty">
-        <div class="empty-icon">ðŸ”</div>
+        <div class="empty-icon">🔐</div>
         <div class="empty-title">No accounts yet</div>
-        <div class="empty-desc">Add any account that uses Google Authenticatorâ€“style 2FA.</div>
+        <div class="empty-desc">Add any account that uses Google Authenticator–style 2FA.</div>
         <div class="empty-steps">
-          <div class="empty-step"><div class="step-num">1</div><span>Go to a site's 2FA settings (e.g. GitHub â†’ Security)</span></div>
+          <div class="empty-step"><div class="step-num">1</div><span>Go to a site's 2FA settings (e.g. GitHub → Security)</span></div>
           <div class="empty-step"><div class="step-num">2</div><span>Choose "setup key" instead of scanning the QR code</span></div>
           <div class="empty-step"><div class="step-num">3</div><span>Paste that secret key here and tap Add Account</span></div>
         </div>
@@ -513,7 +514,7 @@ function render() {
         </div>
         <div class="card-right">
           <div class="card-code" id="code-${acc.id}" data-raw="" onclick="copyCode(${acc.id})">------</div>
-          <button class="card-del" onclick="deleteAccount(${acc.id})" title="Remove">âœ•</button>
+          <button class="card-del" onclick="deleteAccount(${acc.id})" title="Remove">✕</button>
         </div>
       </div>
       <div class="card-bar"><div class="card-bar-fill" id="bar-${acc.id}"></div></div>`;
@@ -523,7 +524,7 @@ function render() {
   tick();
 }
 
-// â”€â”€ Tick â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Tick ─────────────────────────────────────────────────────────────────────
 
 async function updateCard(acc) {
   if (!acc) return;
@@ -572,13 +573,13 @@ async function tick() {
 render();
 setInterval(tick, 1000);
 
-// â”€â”€ Keys â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Keys ────────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && panelOpen) addAccount();
   if (e.key === 'Escape' && panelOpen) togglePanel();
 });
 
-// â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Toast ────────────────────────────────────────────────────────────────────
 let toastTimer;
 function toast(msg) {
   const el = document.getElementById('toast');
